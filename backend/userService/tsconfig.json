@@ -1,0 +1,19 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@configs/*": ["./src/configs/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@db/*": ["./src/db/*"],
+      "@services/*": ["./src/services/*"],
+      "@controllers/*": ["./src/controllers/*"],
+      "@middlewares/*" : ["./src/middlewares/*"],
+      "@routes/*" : ["./src/routes/*"],
+      "@rabbitmq/*" : ["./src/rabbitmq/*"]
+    }
+  },
+  "include": ["./src"]
+}

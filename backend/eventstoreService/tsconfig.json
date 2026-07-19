@@ -1,0 +1,14 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "paths": {
+      "@/*" : ["./src/*"],
+      "@configs/*": ["./src/configs/*"],
+      "@utils/*" : ["./src/utils/*"],
+      "@rabbitmq/*" : ["./src/rabbitmq/*"]
+    }
+  },
+  "include": ["./src"]
+}
