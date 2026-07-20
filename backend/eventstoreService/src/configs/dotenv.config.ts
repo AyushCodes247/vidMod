@@ -8,6 +8,8 @@ interface dotenvTypes {
   REDIS_PORT: number;
   NODE_ENV: string;
   RABBITMQ_URI: string;
+  MONGOURI : string;
+  ORIGIN_URI: string;
 }
 
 const env: dotenvTypes = {
@@ -17,6 +19,8 @@ const env: dotenvTypes = {
   REDIS_PASSWORD: process.env.REDIS_PASSWORD!,
   NODE_ENV: process.env.NODE_ENV!,
   RABBITMQ_URI: process.env.RABBITMQ_URI!,
+  MONGOURI: process.env.MONGOURI!,
+  ORIGIN_URI : process.env.ORIGIN_URI!
 };
 
 export default env;

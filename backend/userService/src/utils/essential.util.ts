@@ -6,14 +6,15 @@ type AsyncHandler = (
   next: NextFunction,
 ) => Promise<unknown>;
 
-export const time = () => new Date().toISOString();
 
 export const asyncHandler =
-  (fn: AsyncHandler) => (req: Request, res: Response, next: NextFunction) => {
-    return Promise.resolve(fn(req, res, next)).catch(next);
-  };
+(fn: AsyncHandler) => (req: Request, res: Response, next: NextFunction) => {
+  return Promise.resolve(fn(req, res, next)).catch(next);
+};
 
 export const otpGenerator = (): string => {
   const otp = Math.floor(100000 + Math.random() * 900000);
   return otp.toString();
 };
+
+export const time = () => new Date().toISOString();
