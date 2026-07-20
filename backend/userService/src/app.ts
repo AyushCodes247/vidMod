@@ -6,6 +6,7 @@ import cors from "cors";
 import env from "@configs/dotenv.config.js";
 import router from "@routes/index.route.js";
 import { errorHandler } from "@middlewares/error.middleware.js";
+import swaggerDocs from "@/swagger/swagger.docs.js";
 
 const app = express();
 
@@ -35,5 +36,7 @@ app.use(cookieParser());
 app.use("/", router);
 
 app.use(errorHandler);
+
+swaggerDocs(app);
 
 export default app;

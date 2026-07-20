@@ -4,7 +4,7 @@ import type { ValidationResult } from "joi";
 
 export interface EventSchemaType {
   eventId: string; // Correlation ID
-  aggregateId: string; // User ID / Video ID
+  aggregateId?: string | null; // User ID / Video ID
   eventName: string;
   serviceName: string;
   eventTime: Date;
@@ -22,7 +22,6 @@ const eventSchema = new Schema<EventSchemaType>(
 
     aggregateId: {
       type: String,
-      required: true,
       index: true,
     },
 
@@ -40,9 +39,9 @@ const eventSchema = new Schema<EventSchemaType>(
 
     eventVersion: {
       type: Number,
+      required: true,
       default: 1,
       min: 1,
-      required: true,
     },
 
     eventTime: {
@@ -60,6 +59,12 @@ const eventSchema = new Schema<EventSchemaType>(
     versionKey: false,
   },
 );
+
+/*
+|--------------------------------------------------------------------------
+| Compound Indexes
+|--------------------------------------------------------------------------
+*/
 
 eventSchema.index({
   aggregateId: 1,
@@ -81,10 +86,16 @@ eventSchema.index({
   serviceName: 1,
 });
 
+/*
+|--------------------------------------------------------------------------
+| Joi Validation Schema
+|--------------------------------------------------------------------------
+*/
+
 const joiSchema = Joi.object<EventSchemaType>({
   eventId: Joi.string().uuid().required(),
 
-  aggregateId: Joi.string().required(),
+  aggregateId: Joi.optional(),
 
   eventName: Joi.string().trim().required(),
 
@@ -108,7 +119,6 @@ const validateSchema = (
 
 const eventModel = model<EventSchemaType>("Event", eventSchema);
 
-export default {
-  eventModel,
-  validateSchema,
-};
+export { validateSchema };
+
+export default eventModel;
