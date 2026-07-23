@@ -12,7 +12,8 @@
       "@controllers/*": ["./src/controllers/*"],
       "@middlewares/*": ["./src/middlewares/*"],
       "@routes/*": ["./src/routes/*"],
-      "@rabbitmq/*": ["./src/rabbitmq/*"]
+      "@rabbitmq/*": ["./src/rabbitmq/*"],
+      "@models/*": ["./src/models/*"]
     }
   },
   "include": ["./src"]

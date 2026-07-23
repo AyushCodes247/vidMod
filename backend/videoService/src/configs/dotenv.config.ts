@@ -12,6 +12,7 @@ interface dotenvTypes {
   ORIGIN_URI: string;
   MAX_VIDEO_SIZE: number;
   JWT_ACCESS_TOKEN: string;
+  VIDEO_STORAGE_PATH: string;
 }
 
 const env: dotenvTypes = {
@@ -25,6 +26,7 @@ const env: dotenvTypes = {
   ORIGIN_URI: process.env.ORIGIN_URI!,
   MAX_VIDEO_SIZE: Number(process.env.MAX_VIDEO_SIZE),
   JWT_ACCESS_TOKEN: process.env.JWT_ACCESS_TOKEN!,
+  VIDEO_STORAGE_PATH: process.env.VIDEO_STORAGE_PATH!
 };
 
 export default env;

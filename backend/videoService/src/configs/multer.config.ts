@@ -9,7 +9,7 @@ import { AppError } from "@/utils/error.util.js";
 import type { Request } from "express";
 import type { FileFilterCallback } from "multer";
 
-const uploadPath = path.join(process.cwd(), "uploads", "videos");
+const uploadPath = env.VIDEO_STORAGE_PATH;
 
 if (!fs.existsSync(uploadPath)) {
   fs.mkdirSync(uploadPath, { recursive: true });
@@ -43,7 +43,10 @@ const fileFilter: multer.Options["fileFilter"] = (
 ) => {
   if (!allowedMimeTypes.includes(file.mimetype)) {
     return cb(
-      new AppError("Only MP4, WEBM, MKV and MOV videos are allowed.", 400),
+      new AppError(
+        "Only MP4, WEBM, MKV and MOV videos are allowed.",
+        400,
+      ),
     );
   }
 

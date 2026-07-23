@@ -1,6 +1,10 @@
 fastapi
-uvicorn
+uvicorn[standard]
 python-dotenv
 aio-pika
 nudenet
 python-multipart
+opencv-python
+numpy
+aiofiles
+PyJWT
