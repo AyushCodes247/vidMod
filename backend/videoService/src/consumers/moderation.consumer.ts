@@ -2,6 +2,7 @@ import { subscribe } from "@/rabbitmq/event.pubSub.js";
 import { publish } from "@/rabbitmq/event.pubSub.js";
 import { VideoModel } from "@models/video.model.js";
 import crypto from "crypto";
+import transcodeService from "@/services/transcodeS3.service.js";
 
 const moderationConsumer = async () => {
   await subscribe(
@@ -19,6 +20,7 @@ const moderationConsumer = async () => {
         videoName: data.videoName,
         status: data.status,
         videoId: data.videoId,
+        videoPath: data.video_path,
       };
 
       console.log(data);
@@ -140,6 +142,8 @@ const moderationConsumer = async () => {
           videoName: generalData.videoName,
 
           moderationResult: moderationData,
+
+          key: "",
         });
 
         console.info("VIDEO CREATED SUCCESSFULLY.");
@@ -163,6 +167,13 @@ const moderationConsumer = async () => {
             decision: moderationData.decision,
           },
         });
+
+        const data = await transcodeService({
+          videoId: generalData.videoId,
+          videoPath: generalData.videoPath,
+        });
+
+        console.log(data);
       } catch (error) {
         console.error(error);
 

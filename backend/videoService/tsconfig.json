@@ -13,7 +13,9 @@
       "@middlewares/*": ["./src/middlewares/*"],
       "@routes/*": ["./src/routes/*"],
       "@rabbitmq/*": ["./src/rabbitmq/*"],
-      "@models/*": ["./src/models/*"]
+      "@models/*": ["./src/models/*"],
+      "@queues/*": ["./src/queues/*"],
+      "@transcode/*" : ["./src/transcode/*"]
     }
   },
   "include": ["./src"]

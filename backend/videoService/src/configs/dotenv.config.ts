@@ -13,6 +13,10 @@ interface dotenvTypes {
   MAX_VIDEO_SIZE: number;
   JWT_ACCESS_TOKEN: string;
   VIDEO_STORAGE_PATH: string;
+  S3_ACCESS_KEY: string;
+  S3_SECRET_ACCESS_KEY: string;
+  S3_REGION: string;
+  S3_BUCKET_NAME: string;
 }
 
 const env: dotenvTypes = {
@@ -26,7 +30,11 @@ const env: dotenvTypes = {
   ORIGIN_URI: process.env.ORIGIN_URI!,
   MAX_VIDEO_SIZE: Number(process.env.MAX_VIDEO_SIZE),
   JWT_ACCESS_TOKEN: process.env.JWT_ACCESS_TOKEN!,
-  VIDEO_STORAGE_PATH: process.env.VIDEO_STORAGE_PATH!
+  VIDEO_STORAGE_PATH: process.env.VIDEO_STORAGE_PATH!,
+  S3_ACCESS_KEY: process.env.S3_ACCESS_KEY!,
+  S3_SECRET_ACCESS_KEY : process.env.S3_SECRET_ACCESS_KEY!,
+  S3_REGION : process.env.s3_REGION!,
+  S3_BUCKET_NAME : process.env.s3_BUCKET_NAME!
 };
 
 export default env;

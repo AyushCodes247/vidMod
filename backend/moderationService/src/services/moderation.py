@@ -57,6 +57,9 @@ async def moderate_video(
             "processingTimeMs":
             processing_time,
 
+            "video_path": 
+            video_path,
+
             **moderation_result,
         }
 

@@ -1,10 +1,6 @@
 import { Schema, model } from "mongoose";
 
-export type ModerationDecision =
-  | "SAFE"
-  | "SENSITIVE"
-  | "UNSAFE"
-  | "BLOCKED";
+export type ModerationDecision = "SAFE" | "SENSITIVE" | "UNSAFE" | "BLOCKED";
 
 export interface Prediction {
   label: string;
@@ -50,6 +46,7 @@ export interface VideoModelDT {
   userId: string;
   publicVideoId: string;
   videoName: string;
+  hlsUri: string;
   moderationResult: ModerationResult;
 }
 
@@ -77,12 +74,7 @@ const moderationSchema = new Schema(
   {
     decision: {
       type: String,
-      enum: [
-        "SAFE",
-        "SENSITIVE",
-        "UNSAFE",
-        "BLOCKED",
-      ],
+      enum: ["SAFE", "SENSITIVE", "UNSAFE", "BLOCKED"],
       required: true,
     },
 
@@ -160,22 +152,16 @@ const moderationSchema = new Schema(
     averageExplicitConfidence: {
       type: Number,
       required: true,
-      min: 0,
-      max: 1,
     },
 
     averageSensitiveConfidence: {
       type: Number,
       required: true,
-      min: 0,
-      max: 1,
     },
 
     highestConfidence: {
       type: Number,
       required: true,
-      min: 0,
-      max: 1,
     },
 
     highestPrediction: {
@@ -221,7 +207,6 @@ const videoSchema = new Schema<VideoModelDT>(
     publicVideoId: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
     },
 
@@ -229,6 +214,11 @@ const videoSchema = new Schema<VideoModelDT>(
       type: String,
       required: true,
       trim: true,
+    },
+
+    hlsUri: {
+      type: String,
+      default: "",
     },
 
     moderationResult: {
@@ -240,7 +230,6 @@ const videoSchema = new Schema<VideoModelDT>(
     timestamps: true,
   },
 );
-
 
 /**
  * Compound Indexes
@@ -258,7 +247,6 @@ videoSchema.index({
   publicVideoId: 1,
 });
 
-
 /**
  * Single Field Indexes
  */
@@ -268,8 +256,4 @@ videoSchema.index({
   publicVideoId: 1,
 });
 
-
-export const VideoModel = model<VideoModelDT>(
-  "Video",
-  videoSchema,
-);
+export const VideoModel = model<VideoModelDT>("Video", videoSchema);
