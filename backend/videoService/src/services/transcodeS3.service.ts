@@ -9,8 +9,6 @@ import transcodeJob from "@/transcode/job.js";
 import { uploadS3 } from "@/utils/s3.util.js";
 import { time } from "@/utils/essential.util.js";
 
-console.log("TRANSCODING WORKER IMPORTED.");
-
 const queueEvents = new QueueEvents("transcode-queue", {
   connection: bullMQRedis,
 });
@@ -108,7 +106,6 @@ queueEvents.on(
     try {
       const r = returnvalue as unknown;
       const result = r as TranscodeResult;
-      console.log("Video transcoding result info:", result);
       console.info(`[${time()}] TRANSCODING JOB : ${jobId} COMPLETED.`);
 
       const masterURI = await uploadDirectory(
@@ -126,7 +123,7 @@ queueEvents.on(
         },
         {
           $set: {
-            hlsURI: masterURI,
+            hlsPath: masterURI,
             status: "READY",
           },
         },
@@ -159,7 +156,6 @@ const transcodeService = async ({
     videoPath,
   });
 
-  console.log(job);
   return job;
 };
 

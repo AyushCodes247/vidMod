@@ -21,6 +21,7 @@ const moderationConsumer = async () => {
         status: data.status,
         videoId: data.videoId,
         videoPath: data.video_path,
+        visibility: data.visibility,
       };
 
       console.log(data);
@@ -141,9 +142,9 @@ const moderationConsumer = async () => {
 
           videoName: generalData.videoName,
 
-          moderationResult: moderationData,
+          visibility: generalData.visibility,
 
-          key: "",
+          moderationResult: moderationData,
         });
 
         console.info("VIDEO CREATED SUCCESSFULLY.");

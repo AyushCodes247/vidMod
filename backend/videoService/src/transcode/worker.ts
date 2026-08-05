@@ -135,7 +135,7 @@ const getResolution = (
 
   const output = result.stdout.trim();
 
-  const [width, height] = output.split("x").map(Number);
+  const [width, height]: any = output.split("x").map(Number);
 
   return {
     width,
@@ -176,7 +176,7 @@ const getFPS = (file: string): number => {
 
   const output = result.stdout.trim();
 
-  const [numerator, denominator] = output.split("/").map(Number);
+  const [numerator, denominator]: any = output.split("/").map(Number);
 
   return Math.round(numerator / denominator);
 };
@@ -192,7 +192,6 @@ new Worker(
 
   async (job: Job) => {
     console.info(`[${time()}] PROCESSING TRANSCODING JOB : ${job.id}`);
-    console.log(job.data);
     const { videoId, videoPath } = job.data;
 
     const absoluteVideoPath = path.resolve(videoPath);
@@ -208,15 +207,6 @@ new Worker(
     const fps = Number.isFinite(detectedFPS) ? detectedFPS : 30;
 
     const gopSize = fps * 2;
-    console.info(`[${time()}] VIDEO ID : ${videoId}`);
-
-    console.info(
-      `[${time()}] RESOLUTION : ${resolution.width}x${resolution.height}`,
-    );
-
-    console.info(`[${time()}] FPS : ${fps}`);
-
-    console.info(`[${time()}] AUDIO : ${videoHasAudio}`);
 
     const qualities = QUALITIES.filter(
       (quality) =>
@@ -230,8 +220,6 @@ new Worker(
         br: getSuitableBitrate(resolution.height),
       });
     }
-
-    console.info(`[${time()}] TRANSCODE QUALITIES :`, qualities);
 
     const videoDir = path.join(OUT_DIR, videoId);
 
@@ -250,10 +238,6 @@ new Worker(
         (q, index) => `[0:v]scale=${q.w}:${q.h}:flags=fast_bilinear[v${index}]`,
       )
       .join(";");
-
-    console.info(`[${time()}] FILTER COMPLEX :`);
-
-    console.info(filterComplex);
 
     const args = [
       "-i",
@@ -290,12 +274,6 @@ new Worker(
       "0",
     ];
 
-    console.info("\n========== FFMPEG COMMAND ==========\n");
-
-    console.info(`ffmpeg ${args.join(" ")}`);
-
-    console.info("\n===================================\n");
-
     qualities.forEach((quality, index) => {
       args.push("-map", `[v${index}]`);
 
@@ -330,10 +308,6 @@ new Worker(
         videoHasAudio ? `v:${index},a:${index}` : `v:${index}`,
       )
       .join(" ");
-
-    console.info(`[${time()}] STREAM MAP : ${streamMap}`);
-
-    console.info(`[${time()}] OUTPUT DIRECTORY : ${videoDir}`);
 
     const outputPattern = path.posix.join(
       videoDir.replaceAll("\\", "/"),
@@ -390,8 +364,6 @@ new Worker(
 
           ffmpegLogs += output;
 
-          console.log(`[FFMPEG] ${output}`);
-
           const match = output.match(/time=(\d+:\d+:\d+\.\d+)/);
 
           if (!match) {
@@ -429,16 +401,6 @@ new Worker(
           console.info(
             `[${time()}] MASTER EXISTS : ${fs.existsSync(masterPath)}`,
           );
-
-          if (fs.existsSync(masterPath)) {
-            const content = fs.readFileSync(masterPath, "utf-8");
-
-            console.info("\n========== MASTER PLAYLIST ==========\n");
-
-            console.info(content);
-
-            console.info("\n=====================================\n");
-          }
 
           resolve({
             videoId,
@@ -478,5 +440,3 @@ new Worker(
     concurrency: 2,
   },
 );
-
-console.log("WORKER CREATED.");

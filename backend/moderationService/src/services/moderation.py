@@ -13,6 +13,7 @@ from services.nudenet import (
 async def moderate_video(
     video_id: str,
     video_path: str,
+    visibility: str
 ):
 
     start_time = time.time()
@@ -59,6 +60,9 @@ async def moderate_video(
 
             "video_path": 
             video_path,
+
+            "visibility" : 
+            visibility,
 
             **moderation_result,
         }

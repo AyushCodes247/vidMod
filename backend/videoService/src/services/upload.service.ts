@@ -7,6 +7,7 @@ interface UploadVideoType {
   userId: string | undefined;
   file: Express.Multer.File;
   videoId: string;
+  visibility : string;
 }
 
 const uploadVideoService = async (data: UploadVideoType): Promise<void> => {
@@ -34,6 +35,7 @@ const uploadVideoService = async (data: UploadVideoType): Promise<void> => {
       videoId: data.videoId,
       videoName: data.file.originalname,
       videoPath: data.file.path,
+      visibility : data.visibility
     },
   });
 };

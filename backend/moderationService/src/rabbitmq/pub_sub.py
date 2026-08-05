@@ -88,6 +88,10 @@ async def subscribe_moderation_jobs():
                         "videoName"
                     )
 
+                    visibility = event_payload.get(
+                        "visibility"
+                    )
+
                     if not video_id:
                         raise ValueError(
                             "Missing videoId."
@@ -102,6 +106,7 @@ async def subscribe_moderation_jobs():
                         await moderate_video(
                             video_id=video_id,
                             video_path=video_path,
+                            visibility=visibility
                         )
                     )
 
