@@ -6,13 +6,14 @@ import {
   DeleteObjectsCommand,
   ListObjectsV2Command,
   HeadObjectCommand,
+  type GetObjectCommandOutput,
 } from "@aws-sdk/client-s3";
-
-import type { GetObjectCommandOutput } from "@aws-sdk/client-s3";
 
 import env from "@/configs/dotenv.config.js";
 
 import { createReadStream } from "fs";
+
+import logger from "@utils/logger.util.js";
 
 export const s3Client = new S3Client({
   region: env.S3_REGION,
@@ -52,7 +53,7 @@ export async function uploadS3({
 
     return key;
   } catch (error) {
-    console.error("S3 Upload Error :", error);
+    logger.error(`S3 Upload Error : ${error}`);
 
     throw error;
   }
@@ -67,7 +68,7 @@ export async function getObject(key: string): Promise<GetObjectCommandOutput> {
       }),
     );
   } catch (error) {
-    console.error("S3 Get Object Error :", error);
+    logger.error(`S3 Get Object Error : ${error}`);
 
     throw error;
   }
@@ -88,7 +89,7 @@ export async function getObjectAsString(key: string): Promise<string> {
 
     return await response.Body.transformToString();
   } catch (error) {
-    console.error("S3 Get Object As String Error :", error);
+    logger.error(`S3 Get Object As String Error : ${error}`);
 
     throw error;
   }
@@ -120,7 +121,7 @@ export async function deleteObject(key: string): Promise<boolean> {
 
     return response.$metadata.httpStatusCode === 204;
   } catch (error) {
-    console.error("S3 Delete Object Error :", error);
+    logger.error(`S3 Delete Object Error : ${error}`);
 
     throw error;
   }
@@ -151,7 +152,7 @@ export async function deleteDirectory(prefix: string): Promise<void> {
       }),
     );
   } catch (error) {
-    console.error("S3 Directory Delete Error :", error);
+    logger.error(`S3 Directory Delete Error : ${error}`);
 
     throw error;
   }

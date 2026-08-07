@@ -1,6 +1,6 @@
-import amqplib from "amqplib";
+import amqplib , { type Channel } from "amqplib";
 import { time } from "@/utils/essential.util.js";
-import type { Channel } from "amqplib";
+import logger from "@utils/logger.util.js";
 
 export const EXCHANGE_NAME = "vidmod.events";
 export const EXCHANGE_TYPE = "topic";
@@ -16,7 +16,7 @@ export const connectRabbitMQ = async (url : string) => {
         durable : true
     });
 
-    console.info(`[${time()}] RABBITMQ CONNECTED SUCCESSFULLY.`);
+    logger.info(`RABBITMQ CONNECTED SUCCESSFULLY.`);
 
     return channel;
 }

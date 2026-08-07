@@ -1,6 +1,6 @@
 import { Redis } from "ioredis";
 import env from "./dotenv.config.js";
-import { time } from "@utils/essential.util.js";
+import logger from "@utils/logger.util.js";
 
 export const redis = new Redis({
   host: env.REDIS_HOST,
@@ -17,15 +17,15 @@ export const redis = new Redis({
 });
 
 redis.on("connect", (): void => {
-  console.info(`[${time()}] Redis connected successfully.`);
+  logger.info(`Redis connected successfully.`);
 });
 
 redis.on("ready", (): void => {
-  console.info(`[${time()}] Redis is ready.`);
+  logger.info(`Redis is ready.`);
 });
 
 redis.on("error", (error: unknown): void => {
-  console.error(`[${time()}] Redis error.: ${error}`);
+  logger.error(`Redis error.: ${error}`);
 });
 
 export const bullMQRedis = new Redis({

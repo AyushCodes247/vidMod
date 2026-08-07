@@ -1,6 +1,6 @@
 import { EXCHANGE_NAME, getChannel } from "./config.js";
 import type { EventPayload } from "./event.type.js";
-import { time } from "@/utils/essential.util.js";
+import logger from "@utils/logger.util.js";
 
 export const publish = async (
   routingKey: string,
@@ -17,13 +17,13 @@ export const publish = async (
     },
   );
 
-  console.info(`[${time()}] EVENT PUBLISHED : ${event.eventName}`);
+  logger.info(`EVENT PUBLISHED : ${event.eventName}`);
 };
 
 export const subscribe = async (
   queueName: string,
   routingKey: string,
-  callback: (data: any) => Promise<void>,
+  callback: (data: unknown) => Promise<void>,
 ): Promise<void> => {
   const channel = getChannel();
 
@@ -76,9 +76,9 @@ export const subscribe = async (
 
       channel.ack(message);
 
-      console.info(`[${time()}] EVENT ACKNOWLEDGED.`);
+      logger.info(`EVENT ACKNOWLEDGED.`);
     } catch (error) {
-      console.error(`[${time()}] EVENT PROCESSING FAILED : ${error}`);
+      logger.error(`EVENT PROCESSING FAILED : ${error}`);
 
       /*
       |--------------------------------------------------------------------------

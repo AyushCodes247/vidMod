@@ -1,6 +1,5 @@
 import { Schema, model } from "mongoose";
-import Joi from "joi";
-import type { ValidationResult } from "joi";
+import Joi, { type ValidationResult } from "joi";
 
 export interface EventSchemaType {
   eventId: string; // Correlation ID

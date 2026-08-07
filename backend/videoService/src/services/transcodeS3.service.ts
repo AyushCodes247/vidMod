@@ -7,7 +7,7 @@ import { bullMQRedis } from "@/configs/redis.config.js";
 import { VideoModel } from "@/models/video.model.js";
 import transcodeJob from "@/transcode/job.js";
 import { uploadS3 } from "@/utils/s3.util.js";
-import { time } from "@/utils/essential.util.js";
+import logger from "@utils/logger.util.js";
 
 const queueEvents = new QueueEvents("transcode-queue", {
   connection: bullMQRedis,
@@ -88,7 +88,7 @@ const removeDirectory = async (directory: string): Promise<void> => {
 };
 
 queueEvents.on("progress", ({ jobId, data }) => {
-  console.info(`[${time()}] TRANSCODING JOB : ${jobId} : ${data}% COMPLETED.`);
+  logger.info(`TRANSCODING JOB : ${jobId} : ${data}% COMPLETED.`);
 });
 
 type TranscodeResult = {
@@ -106,7 +106,7 @@ queueEvents.on(
     try {
       const r = returnvalue as unknown;
       const result = r as TranscodeResult;
-      console.info(`[${time()}] TRANSCODING JOB : ${jobId} COMPLETED.`);
+      logger.info(`TRANSCODING JOB : ${jobId} COMPLETED.`);
 
       const masterURI = await uploadDirectory(
         result.outputDirectory,
@@ -131,17 +131,17 @@ queueEvents.on(
 
       await removeDirectory(result.outputDirectory);
 
-      console.info(`[${time()}] VIDEO : ${result.videoId} IS READY TO STREAM.`);
+      logger.info(`VIDEO : ${result.videoId} IS READY TO STREAM.`);
     } catch (error) {
-      console.error(`[${time()}] TRANSCODING COMPLETION FAILED :`, error);
+      logger.error(`TRANSCODING COMPLETION FAILED :${error}`);
     }
   },
 );
 
 queueEvents.on("failed", ({ jobId, failedReason }) => {
-  console.error(`[${time()}] TRANSCODING JOB : ${jobId} FAILED.`);
+  logger.error(`TRANSCODING JOB : ${jobId} FAILED.`);
 
-  console.error(failedReason);
+  logger.error(failedReason);
 });
 
 const transcodeService = async ({

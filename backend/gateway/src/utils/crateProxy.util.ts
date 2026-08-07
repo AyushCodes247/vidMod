@@ -2,7 +2,7 @@ import expressProxy from "express-http-proxy";
 
 import type { NextFunction, Response } from "express";
 
-import { time } from "@configs/essential.config.js";
+import logger from "@utils/logger.util.js";
 
 interface ProxyOptions {
   parseReqBody?: boolean;
@@ -27,23 +27,23 @@ export const createProxy = (
     },
 
     proxyReqOptDecorator(proxyReqOpts, srcReq) {
-      console.info(
-        `[${time()}] PROXY REQUEST -> ${srcReq.method} ${srcReq.originalUrl} (${target})`,
+      logger.info(
+        `PROXY REQUEST -> ${srcReq.method} ${srcReq.originalUrl} (${target})`,
       );
 
       return proxyReqOpts;
     },
 
     userResDecorator(_proxyRes, proxyResData, userReq, _userRes) {
-      console.info(
-        `[${time()}] PROXY SUCCESS -> ${userReq.method} ${userReq.originalUrl}`,
+      logger.info(
+        `PROXY SUCCESS -> ${userReq.method} ${userReq.originalUrl}`,
       );
 
       return proxyResData;
     },
 
     proxyErrorHandler(err: Error, res: Response, _next: NextFunction) {
-      console.error(`[${time()}] PROXY ERROR -> ${err}`);
+      logger.error(`PROXY ERROR -> ${err}`);
 
       if ((err as NodeJS.ErrnoException).code === "ECONNREFUSED") {
         return res.status(503).json({
@@ -52,7 +52,7 @@ export const createProxy = (
         });
       }
 
-      return res.status((err as any).statusCode ?? 500).json({
+      return res.status((err as unknown as { statusCode: number }).statusCode ?? 500).json({
         success: false,
         message: "Internal Server Error.",
       });

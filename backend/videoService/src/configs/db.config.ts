@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { time } from "@/utils/essential.util.js";
+import logger from "@utils/logger.util.js";
 
 const connectToDB = async (uri: string) => {
   try {
@@ -9,12 +9,12 @@ const connectToDB = async (uri: string) => {
       heartbeatFrequencyMS: 10_000,
     });
 
-    console.info(
-      `[${time()}] VIDEO SERVICE DATABASE CONNECTED SUCCESSFULLY.`,
+    logger.info(
+      `VIDEO SERVICE DATABASE CONNECTED SUCCESSFULLY.`,
     );
   } catch (error) {
-    console.error(
-      `[${time()}] ERROR CONNECTING TO EVENT STORE DATABASE : ${error}`,
+    logger.error(
+      `ERROR CONNECTING TO EVENT STORE DATABASE : ${error}`,
     );
 
     process.exit(1);
@@ -24,8 +24,8 @@ const connectToDB = async (uri: string) => {
     process.on(signal, async () => {
       await mongoose.disconnect();
 
-      console.info(
-        `[${time()}] VIDEO SERVICE DATABASE DISCONNECTED SUCCESSFULLY.`,
+      logger.info(
+        `VIDEO SERVICE DATABASE DISCONNECTED SUCCESSFULLY.`,
       );
 
       process.exit(0);

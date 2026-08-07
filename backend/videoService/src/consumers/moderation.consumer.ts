@@ -1,8 +1,8 @@
-import { subscribe } from "@/rabbitmq/event.pubSub.js";
-import { publish } from "@/rabbitmq/event.pubSub.js";
+import { subscribe, publish } from "@/rabbitmq/event.pubSub.js";
 import { VideoModel } from "@models/video.model.js";
 import crypto from "crypto";
 import transcodeService from "@/services/transcodeS3.service.js";
+import logger from "@utils/logger.util.js";
 
 const moderationConsumer = async () => {
   await subscribe(
@@ -10,7 +10,7 @@ const moderationConsumer = async () => {
     "video.moderation.result",
 
     async (data) => {
-      console.info("MODERATION RESULT RECEIVED");
+      logger.info("MODERATION RESULT RECEIVED");
 
       const generalData = {
         eventId: data.eventId,
@@ -23,8 +23,6 @@ const moderationConsumer = async () => {
         videoPath: data.video_path,
         visibility: data.visibility,
       };
-
-      console.log(data);
 
       const moderationData = {
         decision: data.decision,
@@ -73,7 +71,7 @@ const moderationConsumer = async () => {
        */
 
       if (generalData.status === "FAILED") {
-        console.error("VIDEO MODERATION FAILED.");
+        logger.error("VIDEO MODERATION FAILED.");
 
         await publish("event.video.failed", {
           eventId: crypto.randomUUID(),
@@ -104,7 +102,7 @@ const moderationConsumer = async () => {
         moderationData.decision === "UNSAFE" ||
         moderationData.decision === "BLOCKED"
       ) {
-        console.error("VIDEO REJECTED.");
+        logger.error("VIDEO REJECTED.");
 
         await publish("event.video.rejected", {
           eventId: crypto.randomUUID(),
@@ -147,7 +145,7 @@ const moderationConsumer = async () => {
           moderationResult: moderationData,
         });
 
-        console.info("VIDEO CREATED SUCCESSFULLY.");
+        logger.info("VIDEO CREATED SUCCESSFULLY.");
 
         await publish("event.video.created", {
           eventId: crypto.randomUUID(),
@@ -169,14 +167,12 @@ const moderationConsumer = async () => {
           },
         });
 
-        const data = await transcodeService({
+        const _data = await transcodeService({
           videoId: generalData.videoId,
           videoPath: generalData.videoPath,
         });
-
-        console.log(data);
       } catch (error) {
-        console.error(error);
+        logger.error(error);
 
         await publish("event.video.failed", {
           eventId: crypto.randomUUID(),

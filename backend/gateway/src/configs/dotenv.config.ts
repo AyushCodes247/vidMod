@@ -7,6 +7,7 @@ interface dotenvTypes {
   USER_SERVICE: string;
   VIDEO_SERVICE: string;
   MODERATION_SERVICE: string;
+  NODE_ENV: string;
 }
 
 const env: dotenvTypes = {
@@ -14,7 +15,8 @@ const env: dotenvTypes = {
   EVENT_STORE_SERVICE: process.env.EVENT_STORE_SERVICE!,
   USER_SERVICE: process.env.USER_SERVICE!,
   VIDEO_SERVICE: process.env.VIDEO_SERVICE!,
-  MODERATION_SERVICE: process.env.MODERATION_SERVICE!
+  MODERATION_SERVICE: process.env.MODERATION_SERVICE!,
+  NODE_ENV: process.env.NODE_ENV!,
 };
 
 export default env;

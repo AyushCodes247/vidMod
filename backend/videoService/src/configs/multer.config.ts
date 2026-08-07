@@ -1,4 +1,4 @@
-import multer from "multer";
+import multer , { type FileFilterCallback } from "multer";
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
@@ -7,7 +7,6 @@ import env from "./dotenv.config.js";
 import { AppError } from "@/utils/error.util.js";
 
 import type { Request } from "express";
-import type { FileFilterCallback } from "multer";
 
 const uploadPath = env.VIDEO_STORAGE_PATH;
 

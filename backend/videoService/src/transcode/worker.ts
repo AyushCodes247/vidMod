@@ -1,9 +1,9 @@
-import { Job, Worker } from "bullmq";
+import { Worker , type Job} from "bullmq";
 import { bullMQRedis } from "@/configs/redis.config.js";
 import { spawn, spawnSync } from "child_process";
 import path from "path";
 import fs from "fs";
-import { time } from "@/utils/essential.util.js";
+import logger from "@utils/logger.util.js";
 
 const QUALITIES = [
   { w: 256, h: 144, br: "150k" },
@@ -191,7 +191,7 @@ new Worker(
   "transcode-queue",
 
   async (job: Job) => {
-    console.info(`[${time()}] PROCESSING TRANSCODING JOB : ${job.id}`);
+    logger.info(`PROCESSING TRANSCODING JOB : ${job.id}`);
     const { videoId, videoPath } = job.data;
 
     const absoluteVideoPath = path.resolve(videoPath);
@@ -352,9 +352,9 @@ new Worker(
       "-y",
     );
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
       const ffmpeg = spawn("ffmpeg", args);
-      let ffmpegLogs = "";
+      let _ffmpegLogs = "";
 
       ffmpeg.stderr.on(
         "data",
@@ -362,7 +362,7 @@ new Worker(
         async (data) => {
           const output = data.toString();
 
-          ffmpegLogs += output;
+          _ffmpegLogs += output;
 
           const match = output.match(/time=(\d+:\d+:\d+\.\d+)/);
 
@@ -384,7 +384,7 @@ new Worker(
 
       ffmpeg.on("close", (code) => {
         if (code === 0) {
-          console.info(`[${time()}] TRANSCODING JOB : ${job.id} : COMPLETED.`);
+          logger.info(`TRANSCODING JOB : ${job.id} : COMPLETED.`);
 
           if (fs.existsSync(absoluteVideoPath)) {
             try {
@@ -392,14 +392,14 @@ new Worker(
                 fs.unlinkSync(absoluteVideoPath);
               }
             } catch (error) {
-              console.error(error);
+              logger.error(error);
             }
           }
 
           const masterPath = path.join(videoDir, "master.m3u8");
 
-          console.info(
-            `[${time()}] MASTER EXISTS : ${fs.existsSync(masterPath)}`,
+          logger.info(
+            `MASTER EXISTS : ${fs.existsSync(masterPath)}`,
           );
 
           resolve({
@@ -416,19 +416,19 @@ new Worker(
               force: true,
             });
           } catch (error) {
-            console.error(error);
+            logger.error(error);
           }
         }
       });
 
-      ffmpeg.on("error", (error) => {
+      ffmpeg.on("error", (_error) => {
         try {
           fs.rmSync(videoDir, {
             recursive: true,
             force: true,
           });
         } catch (error) {
-          console.error(error);
+          logger.error(error);
         }
       });
     });

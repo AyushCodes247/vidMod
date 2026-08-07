@@ -4,7 +4,7 @@ import multer from "multer";
 import { AppError } from "@utils/error.util.js";
 import env from "@configs/dotenv.config.js";
 
-export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+export const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
   let error: AppError;
 
   if (err instanceof multer.MulterError) {
