@@ -4,7 +4,6 @@ import { AppError } from "@/utils/error.util.js";
 import crypto from "crypto";
 
 const uploadVideo = asyncHandler(async (req, res) => {
-  const { visibility } = req.body;
   if (!req.file) {
     throw new AppError("Video file is required.", 400);
   }
@@ -15,7 +14,6 @@ const uploadVideo = asyncHandler(async (req, res) => {
     userId: req.user?.publicId,
     file: req.file,
     videoId,
-    visibility
   };
 
   await uploadVideoService(data);

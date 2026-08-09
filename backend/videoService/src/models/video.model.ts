@@ -47,7 +47,6 @@ export interface VideoModelDT {
   publicVideoId: string;
   videoName: string;
   hlsPath: string;
-  visibility: "Public" | "Private" | string;
   moderationResult: ModerationResult;
 }
 
@@ -220,13 +219,6 @@ const videoSchema = new Schema<VideoModelDT>(
     hlsPath: {
       type: String,
       default: "",
-    },
-
-    visibility: {
-      type: String,
-      enum: ["Public", "Private"],
-      required: true,
-      default: "Private",
     },
 
     moderationResult: {
