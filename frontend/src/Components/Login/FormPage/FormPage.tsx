@@ -2,13 +2,9 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
 
-type Gender = "male" | "female" | "others" | "prefer_not_to_say";
-
 interface RegisterFormData {
-  name: string;
   email: string;
   password: string;
-  gender: Gender;
 }
 
 const inputBaseClass =
@@ -25,10 +21,8 @@ const FormPage = () => {
   } = useForm<RegisterFormData>({
     mode: "onBlur",
     defaultValues: {
-      name: "",
       email: "",
       password: "",
-      gender: "prefer_not_to_say",
     },
   });
 
@@ -56,54 +50,13 @@ const FormPage = () => {
         {/* Header */}
         <div className="mb-7 text-center">
           <h2 className="font-display text-2xl font-bold tracking-tight text-zinc-100">
-            Create your workspace
+            Welcome back
           </h2>
 
           <p className="mt-1 text-sm text-zinc-400">
-            Start hosting and moderating in minutes
+            Sign in to your workspace
           </p>
         </div>
-
-        {/* Name */}
-        <div className="mb-4">
-          <label
-            htmlFor="name"
-            className="mb-1.5 block text-sm font-medium text-zinc-300"
-          >
-            Name
-          </label>
-
-          <input
-            id="name"
-            type="text"
-            placeholder="Ava Chen"
-            autoComplete="name"
-            className={`${inputBaseClass} ${
-              errors.name
-                ? "border-red-500 focus:border-red-500"
-                : "border-zinc-800 focus:border-violet-500"
-            }`}
-            {...register("name", {
-              required: "Name is required.",
-              minLength: {
-                value: 2,
-                message: "Name must be at least 2 characters.",
-              },
-              maxLength: {
-                value: 50,
-                message: "Name must not exceed 50 characters.",
-              },
-              validate: (value) =>
-                value.trim().length >= 2 ||
-                "Name must contain at least 2 characters.",
-            })}
-          />
-
-          {errors.name && (
-            <p className="mt-1 text-xs text-red-400">{errors.name.message}</p>
-          )}
-        </div>
-
         {/* Email */}
         <div className="mb-4">
           <label
@@ -224,48 +177,13 @@ const FormPage = () => {
           )}
         </div>
 
-        {/* Gender */}
-        <div className="mb-6">
-          <label
-            htmlFor="gender"
-            className="mb-1.5 block text-sm font-medium text-zinc-300"
-          >
-            Gender
-          </label>
-
-          <select
-            id="gender"
-            className={`${inputBaseClass} ${
-              errors.gender
-                ? "border-red-500 focus:border-red-500"
-                : "border-zinc-800 focus:border-violet-500"
-            }`}
-            {...register("gender", {
-              required: "Please select your gender.",
-              validate: (value) =>
-                ["male", "female", "others", "prefer_not_to_say"].includes(
-                  value,
-                ) || "Invalid gender selection.",
-            })}
-          >
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="others">Others</option>
-            <option value="prefer_not_to_say">Prefer not to say</option>
-          </select>
-
-          {errors.gender && (
-            <p className="mt-1 text-xs text-red-400">{errors.gender.message}</p>
-          )}
-        </div>
-
         {/* Submit */}
         <button
           type="submit"
           disabled={isSubmitting}
           className="h-11 w-full rounded-lg bg-linear-to-r from-violet-500 to-cyan-400 text-sm font-semibold text-black shadow-lg shadow-violet-500/10 transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {isSubmitting ? "Creating account..." : "Create account"}
+          {isSubmitting ? "Sign in account..." : "Sign in"}
         </button>
 
         {/* Terms */}
@@ -287,14 +205,14 @@ const FormPage = () => {
           .
         </p>
 
-        {/* Login */}
+        {/* Register */}
         <div className="mt-6 text-center text-sm text-zinc-500">
-          Already have an account?{" "}
+          Don't have an account?{" "}
           <Link
-            to="/login"
+            to="/register"
             className="font-semibold text-zinc-200 transition hover:text-cyan-400"
           >
-            Sign in
+            Create one
           </Link>
         </div>
       </form>
